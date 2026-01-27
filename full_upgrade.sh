@@ -21,12 +21,12 @@ echo "Eski paket kaldırılıyor..."
 sudo apt remove -y kbdbacklight-manager
 
 # 4. Paketi yeniden inşa et
-echo "Yeni paket (v2.6.0) inşa ediliyor..."
+echo "Yeni paket (v2.7.1) inşa ediliyor..."
 bash package_build.sh
 
 # 5. Yeni paketi kur
 echo "Yeni paket sisteme kuruluyor..."
-sudo apt install -y ./build/kbdbacklight-manager_2.6.0.deb
+sudo apt install -y ./build/kbdbacklight-manager_2.7.1.deb
 
 # 6. Menü ve terminal yollarını tazele
 echo "Sistem yolları güncelleniyor..."

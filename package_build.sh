@@ -3,7 +3,7 @@ export PATH=/usr/bin:/bin:/usr/local/bin:$PATH
 
 # Configuration
 PKG_NAME="kbdbacklight-manager"
-PKG_VERSION="2.6.0"
+PKG_VERSION="2.7.1"
 PKG_DIR="build/${PKG_NAME}_${PKG_VERSION}"
 INSTALL_DIR="${PKG_DIR}/usr/share/${PKG_NAME}"
 BIN_DIR="${PKG_DIR}/usr/bin"

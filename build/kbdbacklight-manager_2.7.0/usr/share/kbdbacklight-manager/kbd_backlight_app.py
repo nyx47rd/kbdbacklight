@@ -31,11 +31,8 @@ class KbdBacklightApp(Gtk.Application):
         
         self.window = None
         self.status_icon = None
-        self.recording_for = None
-        self.bound_keys = []
         
-        if Keybinder:
-            Keybinder.init()
+        # Shortcuts feature removed in v2.7.0 for stability
 
     def do_command_line(self, command_line):
         import argparse
@@ -65,32 +62,7 @@ class KbdBacklightApp(Gtk.Application):
     def do_startup(self):
         Gtk.Application.do_startup(self)
         self.create_status_icon()
-        self.register_shortcuts()
         GLib.timeout_add_seconds(2, self.periodic_check)
-
-    def register_shortcuts(self):
-        if not Keybinder: return
-        for key in self.bound_keys:
-            try: Keybinder.unbind(key)
-            except: pass
-        self.bound_keys = []
-        
-        # registration
-        for kind in ["up", "down"]:
-            key = self.settings.get(f"shortcut_{kind}")
-            # Robust check for unassigned status
-            if key and isinstance(key, str) and "Atanmad" not in key and len(key.strip()) > 0:
-                try:
-                    Keybinder.bind(key, self.on_hotkey_triggered, kind)
-                    self.bound_keys.append(key)
-                except Exception as e:
-                    print(f"Binding error for {key}: {e}")
-
-    def on_hotkey_triggered(self, keystring, data):
-        if self.settings.get("temp_light_enabled"):
-            self.mgr.activate_temp_light()
-        else:
-            self.mgr.adjust_brightness(1 if data == "up" else -1)
 
     def periodic_check(self):
         self.update_ui_state()
@@ -121,10 +93,8 @@ class KbdBacklightApp(Gtk.Application):
 
     def create_window(self):
         self.window = Gtk.ApplicationWindow(application=self, title="Klavye Işığı")
-        self.window.set_default_size(360, 420)
         self.window.set_border_width(10)
         self.window.connect("delete-event", lambda w,e: self.window.hide() or True)
-        self.window.connect("key-press-event", self.on_key_pressed)
 
         nb = Gtk.Notebook()
         self.window.add(nb)
@@ -165,7 +135,7 @@ class KbdBacklightApp(Gtk.Application):
         cb_temp.connect("toggled", self.on_temp_toggle)
         v1.pack_start(cb_temp, False, False, 0)
 
-        v1.pack_start(Gtk.Label(label=_("burn_duration"), xalign=0), False, False, 0)
+        v1.pack_start(Gtk.Label(label=_("burn_duration_label"), xalign=0), False, False, 0)
         d_adj = Gtk.Adjustment(value=self.settings.get("temp_light_duration"), lower=1, upper=60, step_increment=1)
         self.d_slider = Gtk.Scale(orientation=Gtk.Orientation.HORIZONTAL, adjustment=d_adj)
         self.d_slider.set_digits(0)
@@ -189,43 +159,7 @@ class KbdBacklightApp(Gtk.Application):
         btn_reset.connect("clicked", self.on_reset_clicked)
         v1.pack_end(btn_reset, False, False, 10)
 
-        # Tab 2
-        v2 = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=15)
-        v2.set_border_width(15)
-        nb.append_page(v2, Gtk.Label(label=_("tab_shortcuts")))
-        
-        g = Gtk.Grid(column_spacing=10, row_spacing=15)
-        v2.pack_start(g, False, False, 0)
-        
-        self.lbl_up = Gtk.Label(label=self.settings.get("shortcut_up"))
-        self.lbl_dn = Gtk.Label(label=self.settings.get("shortcut_down"))
-        
-        def add_row(idx, name, lbl, target):
-            g.attach(Gtk.Label(label=name), 0, idx, 1, 1)
-            g.attach(lbl, 1, idx, 1, 1)
-            b_rec = Gtk.Button(label="Ayarla")
-            b_rec.connect("clicked", self.start_rec, target, b_rec)
-            g.attach(b_rec, 2, idx, 1, 1)
-            b_clr = Gtk.Button(label="Temizle")
-            b_clr.connect("clicked", self.clear_shortcut, target, lbl)
-            g.attach(b_clr, 3, idx, 1, 1)
-            return b_rec
-
-        self.btn_up = add_row(0, _("increase_light"), self.lbl_up, "up")
-        self.btn_dn = add_row(1, _("decrease_light"), self.lbl_dn, "down")
-
-        self.btn_cancel_rec = Gtk.Button(label=_("cancel_shortcut"))
-        self.btn_cancel_rec.connect("clicked", self.stop_rec)
-        self.btn_cancel_rec.set_no_show_all(True)
-        self.btn_cancel_rec.hide()
-        v2.pack_start(self.btn_cancel_rec, False, False, 5)
-
-        b_save = Gtk.Button(label=_("save_apply"))
-        b_save.get_style_context().add_class("suggested-action")
-        b_save.connect("clicked", self.on_save_shortcuts)
-        v2.pack_end(b_save, False, False, 10)
-
-        # Tab 3: Efektler (Ritim/Sequencer)
+        # Tab 2: Efektler (Ritim/Sequencer)
         v_eff = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=15)
         v_eff.set_border_width(15)
         nb.append_page(v_eff, Gtk.Label(label=_("tab_effects")))
@@ -276,7 +210,10 @@ class KbdBacklightApp(Gtk.Application):
         label_title.set_markup(f"<span size='large' weight='bold'>{_('app_title')}</span>")
         v3.pack_start(label_title, False, False, 0)
         
-        label_info = Gtk.Label(label=_("about_text"))
+        label_info = Gtk.Label()
+        label_info.set_markup(f"{_('about_text')}\n\n"
+                            f"<b>{_('version')}:</b> 2.7.0\n"
+                            f"<b>{_('developer')}:</b> nyx47rd &amp; Deepmind Team")
         label_info.set_justify(Gtk.Justification.CENTER)
         label_info.set_line_wrap(True)
         v3.pack_start(label_info, False, False, 0)
@@ -353,44 +290,6 @@ class KbdBacklightApp(Gtk.Application):
         self.settings["temp_light_duration"] = int(s.get_value())
         config.save_settings(self.settings)
 
-    def start_rec(self, btn, target, b_obj):
-        self.recording_for = target
-        b_obj.set_label("...")
-        self.btn_up.set_sensitive(False)
-        self.btn_dn.set_sensitive(False)
-        self.btn_cancel_rec.show()
-
-    def stop_rec(self, btn=None):
-        self.recording_for = None
-        self.btn_up.set_label(_("set"))
-        self.btn_dn.set_label(_("set"))
-        self.btn_up.set_sensitive(True)
-        self.btn_dn.set_sensitive(True)
-        self.btn_cancel_rec.hide()
-
-    def clear_shortcut(self, btn, target, lbl):
-        self.settings[f"shortcut_{target}"] = "Atanmadı"
-        lbl.set_text(_("not_assigned"))
-        config.save_settings(self.settings)
-
-    def on_key_pressed(self, w, e):
-        if self.settings.get("temp_light_enabled"): self.mgr.activate_temp_light()
-        if not self.recording_for: return False
-        
-        # Check if ESC was pressed to cancel
-        if e.keyval == Gdk.KEY_Escape:
-            self.stop_rec()
-            return True
-
-        mask = Gtk.accelerator_get_default_mod_mask()
-        if Gtk.accelerator_valid(e.keyval, e.state & mask):
-            acc = Gtk.accelerator_name(e.keyval, e.state & mask)
-            if self.recording_for == "up": self.lbl_up.set_text(acc)
-            else: self.lbl_dn.set_text(acc)
-            self.stop_rec()
-            return True
-        return False
-
     def on_step_clicked(self, btn, idx):
         self.steps[idx] = (self.steps[idx] + 1) % (self.mgr.max_brightness + 1)
         btn.set_label(str(self.steps[idx]))
@@ -408,15 +307,6 @@ class KbdBacklightApp(Gtk.Application):
             (high, 500), (0, 500), (high, 500), (0, 500), (high, 500), (0, 3000)
         ]
         self.mgr.play_pattern(sos)
-
-    def on_save_shortcuts(self, b):
-        self.settings["shortcut_up"] = self.lbl_up.get_text()
-        self.settings["shortcut_down"] = self.lbl_dn.get_text()
-        config.save_settings(self.settings)
-        self.register_shortcuts()
-        d = Gtk.MessageDialog(transient_for=self.window, flags=0, message_type=Gtk.MessageType.INFO,
-                                   buttons=Gtk.ButtonsType.OK, text=_("sc_success"))
-        d.run(); d.destroy()
 
 if __name__ == "__main__":
     from gi.repository import Gtk
