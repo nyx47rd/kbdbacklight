@@ -1,4 +1,4 @@
-# Keyboard Backlight Manager (v2.6.0)
+# Keyboard Backlight Manager (v2.7.1)
 
 A modern, universal keyboard backlight management tool for Linux laptops. Optimized for Linux Mint and ASUS laptops, but compatible with any device supported by `brightnessctl`.
 
@@ -49,4 +49,4 @@ Contributions are welcome! Feel free to open issues or submit pull requests.
 Released under the **MIT License**. See [LICENSE](LICENSE) for details.
 
 ---
-Developed with ❤️ by **Antigravity & Deepmind Team**
+Developed with ❤️ by **nyx47rd & Deepmind Team**
