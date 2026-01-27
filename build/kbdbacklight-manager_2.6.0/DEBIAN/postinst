@@ -1,0 +1,5 @@
+#!/bin/bash
+chmod +x /usr/share/kbdbacklight-manager/setup_permissions.sh
+# Run permission setup automatically
+/usr/share/kbdbacklight-manager/setup_permissions.sh
+exit 0

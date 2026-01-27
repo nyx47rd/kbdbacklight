@@ -1,0 +1,9 @@
+[Desktop Entry]
+Name=Klavye Işığı Paneli
+Comment=Klavye arka ışığını yönetin
+Exec=kbdbacklight
+Icon=display-brightness-symbolic
+Terminal=false
+Type=Application
+Categories=Settings;HardwareSettings;
+StartupNotify=false
