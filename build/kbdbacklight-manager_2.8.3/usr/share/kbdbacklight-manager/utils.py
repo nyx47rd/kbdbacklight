@@ -75,9 +75,10 @@ def reset_system():
     udev_file = "/etc/udev/rules.d/99-kbd-backlight.rules"
     pkg_name = "kbdbacklight-manager"
     # Create a removal script to run with pkexec: remove rules AND uninstall package
-    script = f"rm -f {udev_file} && apt remove -y {pkg_name} && udevadm control --reload-rules"
+    # We use ; instead of && so that if uninstall fails (e.g. manual install), we still remove rules
+    script = f"apt remove -y {pkg_name}; rm -f {udev_file}; udevadm control --reload-rules"
     try:
-        subprocess.run(["pkexec", "sh", "-c", script], check=True)
+        subprocess.run(["pkexec", "sh", "-c", script], check=False)
         # Remove local settings
         config_dir = os.path.expanduser("~/.config/kbdbacklight")
         import shutil

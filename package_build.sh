@@ -3,7 +3,7 @@ export PATH=/usr/bin:/bin:/usr/local/bin:$PATH
 
 # Configuration
 PKG_NAME="kbdbacklight-manager"
-PKG_VERSION="2.8.2"
+PKG_VERSION="2.8.3"
 PKG_DIR="build/${PKG_NAME}_${PKG_VERSION}"
 INSTALL_DIR="${PKG_DIR}/usr/share/${PKG_NAME}"
 BIN_DIR="${PKG_DIR}/usr/bin"
@@ -39,7 +39,7 @@ cp kbd-backlight.desktop "${APP_DIR}/kbdbacklight-manager.desktop"
 # Create Control file
 cat <<EOF > "${PKG_DIR}/DEBIAN/control"
 Package: kbdbacklight-manager
-Version: 2.8.2
+Version: 2.8.3
 Section: utils
 Priority: optional
 Architecture: all
