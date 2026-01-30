@@ -3,7 +3,7 @@ export PATH=/usr/bin:/bin:/usr/local/bin:$PATH
 
 # Configuration
 PKG_NAME="kbdbacklight-manager"
-PKG_VERSION="2.7.1"
+PKG_VERSION="2.8.1"
 PKG_DIR="build/${PKG_NAME}_${PKG_VERSION}"
 INSTALL_DIR="${PKG_DIR}/usr/share/${PKG_NAME}"
 BIN_DIR="${PKG_DIR}/usr/bin"
@@ -38,16 +38,17 @@ cp kbd-backlight.desktop "${APP_DIR}/kbdbacklight-manager.desktop"
 
 # Create Control file
 cat <<EOF > "${PKG_DIR}/DEBIAN/control"
-Package: ${PKG_NAME}
-Version: ${PKG_VERSION}
+Package: kbdbacklight-manager
+Version: 2.8.2
 Section: utils
 Priority: optional
 Architecture: all
-Depends: python3, python3-gi, gir1.2-gtk-3.0, gir1.2-keybinder-3.0, gir1.2-xapp-1.0, brightnessctl, python3-pynput
-Maintainer: Antigravity & Deepmind Team
-Description: Universal Keyboard Backlight Manager for Linux
- A modern, GTK-based tool to manage keyboard backlight with global shortcuts
- and a system-wide temporary backlight feature. Compatible with Linux Mint.
+Depends: python3, python3-gi, python3-pynput, brightnessctl, gir1.2-gtk-3.0, gir1.2-xapp-1.0
+Maintainer: Gemini & nyx47rd
+Description: Keyboard Backlight Manager
+ A universal keyboard backlight management tool for Linux.
+ Supports ASUS, MSI, HP and more.
+Installed-Size: $(du -ks build | cut -f 1)
 EOF
 
 # Create Post-install script

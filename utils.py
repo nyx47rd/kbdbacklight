@@ -56,7 +56,8 @@ def get_installed_dependencies():
     return deps
 
 def check_permissions():
-    brightness_file = "/sys/class/leds/asus::kbd_backlight/brightness"
+    device = find_backlight_device()
+    brightness_file = f"/sys/class/leds/{device}/brightness"
     if not os.path.exists(brightness_file):
         return False
     return os.access(brightness_file, os.W_OK)

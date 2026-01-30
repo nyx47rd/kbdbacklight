@@ -19,14 +19,15 @@ rm -f ~/Desktop/kbd-backlight.desktop
 # 3. Eski deb paketini (eğer varsa) kaldır
 echo "Eski paket kaldırılıyor..."
 sudo apt remove -y kbdbacklight-manager
+sudo rm -rf /usr/share/kbdbacklight-manager
 
 # 4. Paketi yeniden inşa et
-echo "Yeni paket (v2.7.1) inşa ediliyor..."
+echo "Yeni paket (v2.8.1) inşa ediliyor..."
 bash package_build.sh
 
 # 5. Yeni paketi kur
 echo "Yeni paket sisteme kuruluyor..."
-sudo apt install -y ./build/kbdbacklight-manager_2.7.1.deb
+sudo apt install -y ./build/kbdbacklight-manager_2.8.1.deb
 
 # 6. Menü ve terminal yollarını tazele
 echo "Sistem yolları güncelleniyor..."

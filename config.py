@@ -31,6 +31,8 @@ def load_settings():
 
 def save_settings(settings):
     try:
+        if not os.path.exists(CONFIG_DIR):
+            os.makedirs(CONFIG_DIR)
         with open(CONFIG_FILE, "w") as f:
             json.dump(settings, f)
     except Exception as e:

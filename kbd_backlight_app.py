@@ -212,7 +212,7 @@ class KbdBacklightApp(Gtk.Application):
         
         label_info = Gtk.Label()
         label_info.set_markup(f"{_('about_text')}\n\n"
-                            f"<b>{_('version')}:</b> 2.7.1\n"
+                            f"<b>{_('version')}:</b> 2.8.1\n"
                             f"<b>{_('developer')}:</b> nyx47rd &amp; Deepmind Team")
         label_info.set_justify(Gtk.Justification.CENTER)
         label_info.set_line_wrap(True)
