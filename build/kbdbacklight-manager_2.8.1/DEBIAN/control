@@ -1,0 +1,11 @@
+Package: kbdbacklight-manager
+Version: 2.8.2
+Section: utils
+Priority: optional
+Architecture: all
+Depends: python3, python3-gi, python3-pynput, brightnessctl, gir1.2-gtk-3.0, gir1.2-xapp-1.0
+Maintainer: Gemini & nyx47rd
+Description: Keyboard Backlight Manager
+ A universal keyboard backlight management tool for Linux.
+ Supports ASUS, MSI, HP and more.
+Installed-Size: 100

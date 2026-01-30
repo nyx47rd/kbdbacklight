@@ -212,7 +212,7 @@ class KbdBacklightApp(Gtk.Application):
         
         label_info = Gtk.Label()
         label_info.set_markup(f"{_('about_text')}\n\n"
-                            f"<b>{_('version')}:</b> 2.7.0\n"
+                            f"<b>{_('version')}:</b> 2.8.1\n"
                             f"<b>{_('developer')}:</b> nyx47rd &amp; Deepmind Team")
         label_info.set_justify(Gtk.Justification.CENTER)
         label_info.set_line_wrap(True)
@@ -233,10 +233,18 @@ class KbdBacklightApp(Gtk.Application):
             d.run()
             d.destroy()
             
-            # Robust self-restart
-            import sys
-            cmd = "/usr/bin/kbdbacklight" if os.path.exists("/usr/bin/kbdbacklight") else sys.argv[0]
-            os.execl(sys.executable, sys.executable, cmd, *sys.argv[1:])
+            # Super-robust restart
+            import sys, subprocess
+            script_path = os.path.abspath(sys.argv[0])
+            python_exe = sys.executable or "/usr/bin/python3"
+            
+            # Strategy 1: Replace current process
+            try:
+                os.execl(python_exe, python_exe, script_path, *sys.argv[1:])
+            except Exception:
+                # Strategy 2: Spawn new and exit (fallback)
+                subprocess.Popen([python_exe, script_path] + sys.argv[1:])
+                sys.exit(0)
 
     def on_reset_clicked(self, btn):
         dialog = Gtk.MessageDialog(transient_for=self.window, flags=0, message_type=Gtk.MessageType.QUESTION,

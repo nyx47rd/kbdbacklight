@@ -91,9 +91,19 @@ translations = {
     }
 }
 
+_lang_override = None
+
+def set_lang_override(lang):
+    global _lang_override
+    _lang_override = lang
+
 def get_string(key):
-    settings = config.load_settings()
-    lang = settings.get("language", "tr")
+    if _lang_override:
+        lang = _lang_override
+    else:
+        settings = config.load_settings()
+        lang = settings.get("language", "tr")
+    
     if lang not in translations:
         lang = "tr"
     return translations[lang].get(key, key)
