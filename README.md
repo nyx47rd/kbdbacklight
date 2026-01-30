@@ -1,4 +1,4 @@
-# Keyboard Backlight Manager (v2.6.0)
+# Keyboard Backlight Manager (v2.8.2)
 
 A modern, universal keyboard backlight management tool for Linux laptops. Optimized for Linux Mint and ASUS laptops, but compatible with any device supported by `brightnessctl`.
 
@@ -13,14 +13,15 @@ A modern, universal keyboard backlight management tool for Linux laptops. Optimi
 - **System Tray Integration**: Control brightness and patterns from the system tray.
 - **Dual Layer Shortcuts**: Supports both application-level and system-wide custom keybindings.
 - **Multilingual Support**: Available in **English** and **Turkish**.
+- **Dark Mode UI**: Modern, sleek interface.
 
 ## 🚀 Installation
 
 ### Using Debian (.deb) Package (Recommended)
-1. Download the latest `.deb` from the [Releases](https://github.com/ysr/kbdbacklight/releases) page.
+1. Download the latest `.deb` from the [Releases](https://github.com/nyx47rd/kbdbacklight/releases) page.
 2. Install it using:
    ```bash
-   sudo apt install ./kbdbacklight-manager_2.6.0.deb
+   sudo apt install ./kbdbacklight-manager_2.8.2.deb
    ```
 3. Launch "Keyboard Backlight Panel" from your application menu.
 
@@ -49,4 +50,4 @@ Contributions are welcome! Feel free to open issues or submit pull requests.
 Released under the **MIT License**. See [LICENSE](LICENSE) for details.
 
 ---
-Developed with ❤️ by **Antigravity & Deepmind Team**
+Developed with ❤️ by **Gemini & nyx47rd**
